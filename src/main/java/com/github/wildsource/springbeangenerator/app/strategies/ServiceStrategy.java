@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 public class ServiceStrategy implements Runnable {
 
-	private FieldSpec produceField() {
+	private FieldSpec produceRepositoryField() {
 		return FieldSpec.builder(Repository.class, "repository")
 						.addAnnotation(Autowired.class)
 						.addModifiers(Modifier.PRIVATE)
@@ -69,7 +69,7 @@ public class ServiceStrategy implements Runnable {
 		return TypeSpec	.classBuilder("MockService")
 						.addModifiers(Modifier.PUBLIC)
 						.addAnnotation(Service.class)
-						.addField(produceField())
+						.addField(produceRepositoryField())
 						.addMethods(methods)
 						.build();
 	}

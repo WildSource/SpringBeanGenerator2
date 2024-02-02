@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.shell.command.annotation.EnableCommand;
 
-import com.github.wildsource.springbeangenerator.app.TopCommand;
+import com.github.wildsource.springbeangenerator.app.commands.GeneratorCommand;
 
-@EnableCommand(TopCommand.class)
+@EnableCommand(GeneratorCommand.class)
 @SpringBootApplication
 public class SpringBeanGeneratorApplication {
 

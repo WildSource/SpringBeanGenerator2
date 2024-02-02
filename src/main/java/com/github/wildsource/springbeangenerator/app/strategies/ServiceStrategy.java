@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.javapoet.FieldSpec;
 import org.springframework.javapoet.JavaFile;
 import org.springframework.javapoet.MethodSpec;
+import org.springframework.javapoet.ParameterizedTypeName;
 import org.springframework.javapoet.TypeSpec;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,13 @@ public class ServiceStrategy implements Runnable {
 		return MethodSpec	.methodBuilder("readMockEntity")
 							.addParameter(Long.class, "id")
 							.returns(Object.class)
+							.addModifiers(Modifier.PRIVATE)
+							.build();
+	}
+
+	private MethodSpec produceReadAllMethod() {
+		return MethodSpec	.methodBuilder("readAllMockEntities")
+							.returns(ParameterizedTypeName.get(List.class, Object.class))
 							.addModifiers(Modifier.PRIVATE)
 							.build();
 	}
@@ -71,6 +79,7 @@ public class ServiceStrategy implements Runnable {
 		List<MethodSpec> methods = new ArrayList<MethodSpec>();
 
 		methods.add(produceReadMethod());
+		methods.add(produceReadAllMethod());
 		methods.add(produceCreateMethod());
 		methods.add(produceModifyMethod());
 		methods.add(produceDeleteMethod());

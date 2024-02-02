@@ -5,7 +5,6 @@ import org.springframework.shell.command.annotation.Command;
 
 import com.github.wildsource.springbeangenerator.app.Executor;
 import com.github.wildsource.springbeangenerator.app.strategies.ControllerStrategy;
-import com.github.wildsource.springbeangenerator.app.strategies.ModuleStrategy;
 import com.github.wildsource.springbeangenerator.app.strategies.RepositoryStrategy;
 import com.github.wildsource.springbeangenerator.app.strategies.ServiceStrategy;
 
@@ -18,9 +17,11 @@ public class GeneratorCommand {
 		this.executor = executor;
 	}
 
-	@Command(command = "feature", description = "generates a named feature with controller, service and repository")
+	@Command(command = "feature", alias = "feat", description = "generates a named feature with controller, service and repository")
 	public String generateFeature() {
-		prepareExecutorAndExecute(new ModuleStrategy());
+		generateRepository();
+		generateService();
+		generateController();
 		return "Feature created";
 	}
 

@@ -9,7 +9,7 @@ import com.github.wildsource.springbeangenerator.app.strategies.ModuleStrategy;
 import com.github.wildsource.springbeangenerator.app.strategies.RepositoryStrategy;
 import com.github.wildsource.springbeangenerator.app.strategies.ServiceStrategy;
 
-@Command(command = "generate")
+@Command(command = "generate", alias = "gen", description = "generates beans")
 public class GeneratorCommand {
 	private Executor executor;
 
@@ -18,25 +18,25 @@ public class GeneratorCommand {
 		this.executor = executor;
 	}
 
-	@Command(command = "feature")
+	@Command(command = "feature", description = "generates a named feature with controller, service and repository")
 	public String generateFeature() {
 		prepareExecutorAndExecute(new ModuleStrategy());
 		return "Feature created";
 	}
 
-	@Command(command = "controller")
+	@Command(command = "controller", alias = "roller", description = "generates a named controller")
 	public String generateController() {
 		prepareExecutorAndExecute(new ControllerStrategy());
 		return "creating controller";
 	}
 
-	@Command(command = "service")
+	@Command(command = "service", alias = "serve", description = "generates a named service")
 	public String generateService() {
 		prepareExecutorAndExecute(new ServiceStrategy());
 		return "generating service";
 	}
 
-	@Command(command = "repository")
+	@Command(command = "repository", alias = "repo", description = "generates a named repository")
 	public String generateRepository() {
 		prepareExecutorAndExecute(new RepositoryStrategy());
 		return "generating repository";

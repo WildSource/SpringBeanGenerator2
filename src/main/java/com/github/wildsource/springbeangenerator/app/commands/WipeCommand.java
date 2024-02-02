@@ -6,7 +6,7 @@ import org.springframework.shell.command.annotation.Command;
 
 @Command(command = "wipe")
 public class WipeCommand {
-	@Command(command = "log")
+	@Command(command = "log", description = "Deletes the spring-shell.log file on exit")
 	public String wipeLog() {
 		File logFile = new File("spring-shell.log");
 		logFile.deleteOnExit();

@@ -18,10 +18,10 @@ public class GeneratorCommand {
 		this.executor = executor;
 	}
 
-	@Command(command = "module")
-	public String generateModule() {
+	@Command(command = "feature")
+	public String generateFeature() {
 		prepareExecutorAndExecute(new ModuleStrategy());
-		return "Module created";
+		return "Feature created";
 	}
 
 	@Command(command = "controller")

@@ -5,33 +5,27 @@ import java.io.IOException;
 
 import javax.lang.model.element.Modifier;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.javapoet.JavaFile;
-import org.springframework.javapoet.MethodSpec;
 import org.springframework.javapoet.TypeSpec;
+import org.springframework.stereotype.Repository;
 
 public class RepositoryStrategy implements Runnable {
 
 	@Override
 	public void run() {
-		MethodSpec main = MethodSpec.methodBuilder("main")
-									.addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-									.returns(void.class)
-									.addParameter(String[].class, "args")
-									.addStatement("$T.out.println($S)", System.class, "Hello, JavaPoet!")
-									.build();
-
-		TypeSpec helloWorld = TypeSpec	.classBuilder("HelloWorld")
-										.addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-										.addMethod(main)
+		TypeSpec repository = TypeSpec	.interfaceBuilder("MockRepository")
+										.addModifiers(Modifier.PUBLIC)
+										.addAnnotation(Repository.class)
+										.addSuperinterface(CrudRepository.class)
 										.build();
 
-		JavaFile javaFile = JavaFile.builder("com.example.helloworld", helloWorld)
+		JavaFile javaFile = JavaFile.builder("featureName", repository)
 									.build();
 
 		try {
-			javaFile.writeToFile(new File("HelloWorld.java"));
+			javaFile.writeToFile(new File("MockRepository.java"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

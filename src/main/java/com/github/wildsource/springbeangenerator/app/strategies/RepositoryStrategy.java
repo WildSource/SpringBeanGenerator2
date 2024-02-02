@@ -7,6 +7,7 @@ import javax.lang.model.element.Modifier;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.javapoet.JavaFile;
+import org.springframework.javapoet.ParameterizedTypeName;
 import org.springframework.javapoet.TypeSpec;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,8 @@ public class RepositoryStrategy implements Runnable {
 		TypeSpec repository = TypeSpec	.interfaceBuilder("MockRepository")
 										.addModifiers(Modifier.PUBLIC)
 										.addAnnotation(Repository.class)
-										.addSuperinterface(CrudRepository.class)
+										.addSuperinterface(ParameterizedTypeName.get(CrudRepository.class, String.class,
+												Long.class))
 										.build();
 
 		JavaFile javaFile = JavaFile.builder("featureName", repository)

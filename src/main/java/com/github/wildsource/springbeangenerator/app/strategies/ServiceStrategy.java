@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import javax.lang.model.element.Modifier;
 
-import org.apache.catalina.startup.ClassLoaderFactory.Repository;
 import org.springframework.javapoet.FieldSpec;
 import org.springframework.javapoet.JavaFile;
 import org.springframework.javapoet.TypeSpec;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 public class ServiceStrategy implements Runnable {

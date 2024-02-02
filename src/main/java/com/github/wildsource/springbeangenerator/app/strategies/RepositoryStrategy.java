@@ -24,7 +24,7 @@ public class RepositoryStrategy implements Runnable {
 									.build();
 
 		try {
-			javaFile.writeToFile(new File("MockRepository.java"));
+			javaFile.writeToFile(new File("MockFeature"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

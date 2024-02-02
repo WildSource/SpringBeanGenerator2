@@ -19,7 +19,7 @@ public class ServiceStrategy implements Runnable {
 										.addModifiers(Modifier.PRIVATE)
 										.build();
 
-		TypeSpec service = TypeSpec	.classBuilder("MockRepository")
+		TypeSpec service = TypeSpec	.classBuilder("MockService")
 									.addModifiers(Modifier.PUBLIC)
 									.addAnnotation(Service.class)
 									.addField(repository)
@@ -29,7 +29,7 @@ public class ServiceStrategy implements Runnable {
 									.build();
 
 		try {
-			javaFile.writeToFile(new File("MockService.java"));
+			javaFile.writeToFile(new File("MockFeature"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

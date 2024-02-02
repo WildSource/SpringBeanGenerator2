@@ -5,8 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.shell.command.annotation.EnableCommand;
 
 import com.github.wildsource.springbeangenerator.app.commands.GeneratorCommand;
+import com.github.wildsource.springbeangenerator.app.commands.WipeCommand;
 
-@EnableCommand(GeneratorCommand.class)
+@EnableCommand(value = { GeneratorCommand.class, WipeCommand.class })
 @SpringBootApplication
 public class SpringBeanGeneratorApplication {
 

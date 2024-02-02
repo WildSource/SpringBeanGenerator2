@@ -1,18 +1,20 @@
 package com.github.wildsource.springbeangenerator.app;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Executor {
-	private Generator generator;
+	private Thread runnerThread;
 
-	public Executor(Generator generator) {
-		super();
-		this.generator = generator;
+	public Executor() {
+		this.runnerThread = null;
 	}
 
-	public Generator getGenerator() {
-		return generator;
+	public void setGenerationStrategy(Runnable strategy) {
+		this.runnerThread = new Thread(strategy);
 	}
 
-	public void setGenerator(Generator generator) {
-		this.generator = generator;
+	public void execute() {
+		this.runnerThread.start();
 	}
 }

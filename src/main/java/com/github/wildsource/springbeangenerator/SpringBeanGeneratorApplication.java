@@ -2,7 +2,11 @@ package com.github.wildsource.springbeangenerator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.shell.command.annotation.EnableCommand;
 
+import com.github.wildsource.springbeangenerator.app.TopCommand;
+
+@EnableCommand(TopCommand.class)
 @SpringBootApplication
 public class SpringBeanGeneratorApplication {
 

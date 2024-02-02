@@ -1,5 +1,10 @@
 package com.github.wildsource.springbeangenerator.app.strategies;
 
-public class ControllerStrategy extends Thread implements Strategy {
+public class ControllerStrategy implements Runnable {
+
+	@Override
+	public void run() {
+
+	}
 
 }

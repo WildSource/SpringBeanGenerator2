@@ -2,6 +2,7 @@ package com.github.wildsource.springbeangenerator.app.strategies;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +100,9 @@ public class ServiceStrategy implements Runnable {
 									.build();
 
 		try {
-			javaFile.writeToFile(new File(serviceName));
+			Path path = javaFile.writeToPath(Path	.of("")
+													.toAbsolutePath());
+			System.out.println(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

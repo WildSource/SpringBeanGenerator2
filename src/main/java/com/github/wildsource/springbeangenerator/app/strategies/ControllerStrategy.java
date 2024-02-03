@@ -2,6 +2,7 @@ package com.github.wildsource.springbeangenerator.app.strategies;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,11 +114,13 @@ public class ControllerStrategy implements Runnable {
 		methods.add(producePutMethod());
 		methods.add(produceDeleteMethod());
 
-		JavaFile javaFile = JavaFile.builder(controllerName + "Name", produceController(methods))
+		JavaFile javaFile = JavaFile.builder(controllerName, produceController(methods))
 									.build();
 
 		try {
-			javaFile.writeToFile(new File(controllerName));
+			Path path = javaFile.writeToPath(Path	.of("")
+													.toAbsolutePath());
+			System.out.println(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

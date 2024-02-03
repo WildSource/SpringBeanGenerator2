@@ -2,6 +2,7 @@ package com.github.wildsource.springbeangenerator.app.strategies;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import javax.lang.model.element.Modifier;
 
@@ -33,7 +34,9 @@ public class RepositoryStrategy implements Runnable {
 									.build();
 
 		try {
-			javaFile.writeToFile(new File(repositoryName));
+			Path path = javaFile.writeToPath(Path	.of("")
+													.toAbsolutePath());
+			System.out.println(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

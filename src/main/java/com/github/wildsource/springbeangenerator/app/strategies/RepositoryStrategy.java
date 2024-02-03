@@ -11,22 +11,29 @@ import org.springframework.javapoet.ParameterizedTypeName;
 import org.springframework.javapoet.TypeSpec;
 import org.springframework.stereotype.Repository;
 
+import com.github.wildsource.springbeangenerator.utils.Capitalizer;
+
 public class RepositoryStrategy implements Runnable {
+	private String repositoryName;
+
+	public RepositoryStrategy(String repositoryName) {
+		this.repositoryName = repositoryName;
+	}
 
 	@Override
 	public void run() {
-		TypeSpec repository = TypeSpec	.interfaceBuilder("MockRepository")
+		TypeSpec repository = TypeSpec	.interfaceBuilder(Capitalizer.capitalizeString(repositoryName) + "Repository")
 										.addModifiers(Modifier.PUBLIC)
 										.addAnnotation(Repository.class)
 										.addSuperinterface(ParameterizedTypeName.get(CrudRepository.class, String.class,
 												Long.class))
 										.build();
 
-		JavaFile javaFile = JavaFile.builder("featureName", repository)
+		JavaFile javaFile = JavaFile.builder(repositoryName, repository)
 									.build();
 
 		try {
-			javaFile.writeToFile(new File("MockFeature"));
+			javaFile.writeToFile(new File(repositoryName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

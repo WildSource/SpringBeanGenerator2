@@ -25,18 +25,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.wildsource.springbeangenerator.utils.Capitalizer;
+
 public class ControllerStrategy implements Runnable {
+	private String controllerName;
+	private String capitalizedName;
+
+	public ControllerStrategy(String controllerName) {
+		this.controllerName = controllerName;
+		this.capitalizedName = Capitalizer.capitalizeString(controllerName);
+	}
 
 	private FieldSpec produceField() {
-		return FieldSpec.builder(Service.class, "service")
+		return FieldSpec.builder(Service.class, controllerName + "Service")
 						.addAnnotation(Autowired.class)
 						.addModifiers(Modifier.PRIVATE)
 						.build();
-
 	}
 
 	private TypeSpec produceController(Iterable<MethodSpec> methods) {
-		return TypeSpec	.classBuilder("MockController")
+		return TypeSpec	.classBuilder(capitalizedName + "Controller")
 						.addModifiers(Modifier.PUBLIC)
 						.addAnnotation(RestController.class)
 						.addAnnotation(RequestMapping.class)
@@ -46,7 +54,7 @@ public class ControllerStrategy implements Runnable {
 	}
 
 	private MethodSpec produceGetMethod() {
-		return MethodSpec	.methodBuilder("getMock")
+		return MethodSpec	.methodBuilder("get" + capitalizedName)
 							.addAnnotation(GetMapping.class)
 							.addAnnotation(ResponseBody.class)
 							.addParameter(ParameterSpec	.builder(Long.class, "id")
@@ -57,7 +65,7 @@ public class ControllerStrategy implements Runnable {
 	}
 
 	private MethodSpec produceGetAllMethod() {
-		return MethodSpec	.methodBuilder("getAllMock")
+		return MethodSpec	.methodBuilder("getAll" + capitalizedName)
 							.addAnnotation(CrossOrigin.class)
 							.addAnnotation(GetMapping.class)
 							.addAnnotation(ResponseBody.class)
@@ -66,7 +74,7 @@ public class ControllerStrategy implements Runnable {
 	}
 
 	private MethodSpec producePostMethod() {
-		return MethodSpec	.methodBuilder("postMock")
+		return MethodSpec	.methodBuilder("post" + capitalizedName)
 							.addAnnotation(PostMapping.class)
 							.addAnnotation(ResponseBody.class)
 							.addParameter(Object.class, "mock")
@@ -75,7 +83,7 @@ public class ControllerStrategy implements Runnable {
 	}
 
 	private MethodSpec producePutMethod() {
-		return MethodSpec	.methodBuilder("putMock")
+		return MethodSpec	.methodBuilder("put" + capitalizedName)
 							.addAnnotation(PutMapping.class)
 							.addAnnotation(ResponseBody.class)
 							.addParameter(Object.class, "modifiedMock")
@@ -85,7 +93,7 @@ public class ControllerStrategy implements Runnable {
 	}
 
 	private MethodSpec produceDeleteMethod() {
-		return MethodSpec	.methodBuilder("deleteMock")
+		return MethodSpec	.methodBuilder("delete" + capitalizedName)
 							.addAnnotation(DeleteMapping.class)
 							.addAnnotation(ResponseBody.class)
 							.addParameter(ParameterSpec	.builder(Long.class, "id")
@@ -105,11 +113,11 @@ public class ControllerStrategy implements Runnable {
 		methods.add(producePutMethod());
 		methods.add(produceDeleteMethod());
 
-		JavaFile javaFile = JavaFile.builder("featureName", produceController(methods))
+		JavaFile javaFile = JavaFile.builder(controllerName + "Name", produceController(methods))
 									.build();
 
 		try {
-			javaFile.writeToFile(new File("MockFeature"));
+			javaFile.writeToFile(new File(controllerName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -16,17 +16,28 @@ import org.springframework.javapoet.TypeSpec;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import com.github.wildsource.springbeangenerator.utils.Capitalizer;
+
 public class ServiceStrategy implements Runnable {
 
+	private String serviceName;
+
+	private String capitalizedName;
+
+	public ServiceStrategy(String serviceName) {
+		this.serviceName = serviceName;
+		this.capitalizedName = Capitalizer.capitalizeString(serviceName);
+	}
+
 	private FieldSpec produceRepositoryField() {
-		return FieldSpec.builder(Repository.class, "repository")
+		return FieldSpec.builder(Repository.class, serviceName + "Repository")
 						.addAnnotation(Autowired.class)
 						.addModifiers(Modifier.PRIVATE)
 						.build();
 	}
 
 	private MethodSpec produceReadMethod() {
-		return MethodSpec	.methodBuilder("readMockEntity")
+		return MethodSpec	.methodBuilder("read" + capitalizedName + "Entity")
 							.addParameter(Long.class, "id")
 							.returns(Object.class)
 							.addModifiers(Modifier.PRIVATE)
@@ -34,14 +45,14 @@ public class ServiceStrategy implements Runnable {
 	}
 
 	private MethodSpec produceReadAllMethod() {
-		return MethodSpec	.methodBuilder("readAllMockEntities")
+		return MethodSpec	.methodBuilder("readAll" + capitalizedName + "Entities")
 							.returns(ParameterizedTypeName.get(List.class, Object.class))
 							.addModifiers(Modifier.PRIVATE)
 							.build();
 	}
 
 	private MethodSpec produceCreateMethod() {
-		return MethodSpec	.methodBuilder("createMockEntity")
+		return MethodSpec	.methodBuilder("create" + capitalizedName + "Entity")
 							.addParameter(Object.class, "mock")
 							.returns(void.class)
 							.addModifiers(Modifier.PRIVATE)
@@ -49,7 +60,7 @@ public class ServiceStrategy implements Runnable {
 	}
 
 	private MethodSpec produceModifyMethod() {
-		return MethodSpec	.methodBuilder("modifyMockEntity")
+		return MethodSpec	.methodBuilder("modify" + capitalizedName + "Entity")
 							.addParameter(Object.class, "modifiedMock")
 							.addParameter(Long.class, "targetMock")
 							.returns(void.class)
@@ -58,7 +69,7 @@ public class ServiceStrategy implements Runnable {
 	}
 
 	private MethodSpec produceDeleteMethod() {
-		return MethodSpec	.methodBuilder("deleteMockEntity")
+		return MethodSpec	.methodBuilder("delete" + capitalizedName + "Entity")
 							.addParameter(Long.class, "id")
 							.returns(void.class)
 							.addModifiers(Modifier.PRIVATE)
@@ -66,7 +77,7 @@ public class ServiceStrategy implements Runnable {
 	}
 
 	private TypeSpec produceService(Iterable<MethodSpec> methods) {
-		return TypeSpec	.classBuilder("MockService")
+		return TypeSpec	.classBuilder("capitalizedNameService")
 						.addModifiers(Modifier.PUBLIC)
 						.addAnnotation(Service.class)
 						.addField(produceRepositoryField())
@@ -84,11 +95,11 @@ public class ServiceStrategy implements Runnable {
 		methods.add(produceModifyMethod());
 		methods.add(produceDeleteMethod());
 
-		JavaFile javaFile = JavaFile.builder("featureName", produceService(methods))
+		JavaFile javaFile = JavaFile.builder(serviceName, produceService(methods))
 									.build();
 
 		try {
-			javaFile.writeToFile(new File("MockFeature"));
+			javaFile.writeToFile(new File(serviceName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

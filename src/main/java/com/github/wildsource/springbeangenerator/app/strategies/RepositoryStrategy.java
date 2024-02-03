@@ -25,7 +25,7 @@ public class RepositoryStrategy implements Runnable {
 		TypeSpec repository = TypeSpec	.interfaceBuilder(Capitalizer.capitalizeString(repositoryName) + "Repository")
 										.addModifiers(Modifier.PUBLIC)
 										.addAnnotation(Repository.class)
-										.addSuperinterface(ParameterizedTypeName.get(CrudRepository.class, String.class,
+										.addSuperinterface(ParameterizedTypeName.get(CrudRepository.class, Object.class,
 												Long.class))
 										.build();
 

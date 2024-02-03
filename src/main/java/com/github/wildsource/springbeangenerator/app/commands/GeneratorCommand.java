@@ -29,7 +29,7 @@ public class GeneratorCommand {
 	@Command(command = "controller", alias = "roller", description = "generates a named controller")
 	public String generateController(@Option(required = true) String controllerName) {
 		prepareExecutorAndExecute(new ControllerStrategy(controllerName));
-		return "creating controller";
+		return "generating controller";
 	}
 
 	@Command(command = "service", alias = "serve", description = "generates a named service")

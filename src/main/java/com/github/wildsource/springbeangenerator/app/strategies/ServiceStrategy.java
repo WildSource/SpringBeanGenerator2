@@ -1,6 +1,5 @@
 package com.github.wildsource.springbeangenerator.app.strategies;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public class ServiceStrategy implements Runnable {
 	}
 
 	private TypeSpec produceService(Iterable<MethodSpec> methods) {
-		return TypeSpec	.classBuilder("capitalizedNameService")
+		return TypeSpec	.classBuilder(capitalizedName + "Service")
 						.addModifiers(Modifier.PUBLIC)
 						.addAnnotation(Service.class)
 						.addField(produceRepositoryField())

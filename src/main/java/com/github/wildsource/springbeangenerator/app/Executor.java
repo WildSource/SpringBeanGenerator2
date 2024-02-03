@@ -16,5 +16,11 @@ public class Executor {
 
 	public void execute() {
 		this.runnerThread.start();
+		try {
+			this.runnerThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

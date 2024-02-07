@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.lang.model.element.Modifier;
 
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.wildsource.springbeangenerator.utils.Capitalizer;
 
-public class ControllerStrategy implements Runnable {
+public class ControllerStrategy implements Callable<Path> {
 	private String controllerName;
 	private String capitalizedName;
 
@@ -104,7 +105,7 @@ public class ControllerStrategy implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public Path call() throws Exception {
 		List<MethodSpec> methods = new ArrayList<MethodSpec>();
 
 		methods.add(produceGetMethod());
@@ -115,14 +116,14 @@ public class ControllerStrategy implements Runnable {
 
 		JavaFile javaFile = JavaFile.builder(controllerName, produceController(methods))
 									.build();
-
+		Path path = null;
 		try {
-			Path path = javaFile.writeToPath(Path	.of("")
-													.toAbsolutePath());
+			path = javaFile.writeToPath(Path.of("")
+											.toAbsolutePath());
 			System.out.println(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return path;
 	}
-
 }

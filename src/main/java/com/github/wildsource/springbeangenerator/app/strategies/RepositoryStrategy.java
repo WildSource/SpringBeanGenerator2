@@ -2,6 +2,7 @@ package com.github.wildsource.springbeangenerator.app.strategies;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.Callable;
 
 import javax.lang.model.element.Modifier;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.github.wildsource.springbeangenerator.utils.Capitalizer;
 
-public class RepositoryStrategy implements Runnable {
+public class RepositoryStrategy implements Callable<Path> {
 	private String repositoryName;
 
 	public RepositoryStrategy(String repositoryName) {
@@ -21,7 +22,7 @@ public class RepositoryStrategy implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public Path call() throws Exception {
 		TypeSpec repository = TypeSpec	.interfaceBuilder(Capitalizer.capitalizeString(repositoryName) + "Repository")
 										.addModifiers(Modifier.PUBLIC)
 										.addAnnotation(Repository.class)
@@ -32,13 +33,14 @@ public class RepositoryStrategy implements Runnable {
 		JavaFile javaFile = JavaFile.builder(repositoryName, repository)
 									.build();
 
+		Path path = null;
 		try {
-			Path path = javaFile.writeToPath(Path	.of("")
-													.toAbsolutePath());
+			path = javaFile.writeToPath(Path.of("")
+											.toAbsolutePath());
 			System.out.println(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return path;
 	}
-
 }

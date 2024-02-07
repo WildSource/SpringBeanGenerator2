@@ -1,5 +1,7 @@
 package com.github.wildsource.springbeangenerator.app.commands;
 
+import java.util.concurrent.Callable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.command.annotation.Command;
 import org.springframework.shell.command.annotation.Option;
@@ -22,9 +24,9 @@ public class GeneratorCommand {
 	@Command(command = "feature", alias = "feat", description = "generates a named feature with controller, service and repository")
 	public String generateFeature(@Option(required = true) String featureName) {
 		generateEntity(featureName);
-		generateRepository(featureName);
-		generateService(featureName);
-		generateController(featureName);
+		// generateRepository(featureName);
+		// generateService(featureName);
+		// generateController(featureName);
 		return "Feature " + featureName + " created";
 	}
 
@@ -52,7 +54,7 @@ public class GeneratorCommand {
 		return "generating " + entityName + " entity";
 	}
 
-	private void prepareExecutorAndExecute(Runnable strategy) {
+	private <T> void prepareExecutorAndExecute(Callable<T> strategy) {
 		this.executor.setGenerationStrategy(strategy);
 		this.executor.execute();
 	}

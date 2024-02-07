@@ -1,5 +1,7 @@
 package com.github.wildsource.springbeangenerator.app;
 
+import java.util.concurrent.Callable;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,7 +12,8 @@ public class Executor {
 		this.runnerThread = null;
 	}
 
-	public void setGenerationStrategy(Runnable strategy) {
+	public <T> void setGenerationStrategy(Callable<T> strategy) {
+		// TODO implement threadpool and stuff to make callables run
 		this.runnerThread = new Thread(strategy);
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.lang.model.element.Modifier;
 
@@ -11,7 +12,6 @@ import org.springframework.javapoet.FieldSpec;
 import org.springframework.javapoet.JavaFile;
 import org.springframework.javapoet.MethodSpec;
 import org.springframework.javapoet.ParameterSpec;
-import org.springframework.javapoet.TypeName;
 import org.springframework.javapoet.TypeSpec;
 
 import com.github.wildsource.springbeangenerator.utils.Capitalizer;
@@ -20,7 +20,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
-public class EntityStrategy implements Runnable {
+public class EntityStrategy implements Callable<Path> {
 	private String entityName;
 	private String capitalizedName;
 
@@ -71,7 +71,7 @@ public class EntityStrategy implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public Path call() throws Exception {
 		List<MethodSpec> methods = new ArrayList<MethodSpec>();
 
 		methods.add(produceDefaultConstructor());
@@ -81,14 +81,14 @@ public class EntityStrategy implements Runnable {
 		JavaFile javaFile = JavaFile.builder(entityName, produceEntity(methods))
 									.build();
 
+		Path path = null;
 		try {
-			Path path = javaFile.writeToPath(Path	.of("")
-													.toAbsolutePath());
+			path = javaFile.writeToPath(Path.of("")
+											.toAbsolutePath());
 			System.out.println(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		return path;
 	}
-
 }

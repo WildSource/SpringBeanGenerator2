@@ -14,7 +14,6 @@ import org.springframework.javapoet.JavaFile;
 import org.springframework.javapoet.MethodSpec;
 import org.springframework.javapoet.ParameterizedTypeName;
 import org.springframework.javapoet.TypeSpec;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.github.wildsource.springbeangenerator.utils.Capitalizer;
@@ -25,13 +24,16 @@ public class ServiceStrategy implements Callable<Path> {
 
 	private String capitalizedName;
 
-	public ServiceStrategy(String serviceName) {
+	private Class<?> repositoryClass;
+
+	public ServiceStrategy(String serviceName, Class<?> repositoryClass) {
 		this.serviceName = serviceName;
 		this.capitalizedName = Capitalizer.capitalizeString(serviceName);
+		this.repositoryClass = repositoryClass;
 	}
 
 	private FieldSpec produceRepositoryField() {
-		return FieldSpec.builder(Repository.class, serviceName + "Repository")
+		return FieldSpec.builder(repositoryClass.getClass(), serviceName + "Repository")
 						.addAnnotation(Autowired.class)
 						.addModifiers(Modifier.PRIVATE)
 						.build();

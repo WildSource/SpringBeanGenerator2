@@ -15,7 +15,6 @@ import org.springframework.javapoet.MethodSpec;
 import org.springframework.javapoet.ParameterSpec;
 import org.springframework.javapoet.ParameterizedTypeName;
 import org.springframework.javapoet.TypeSpec;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +30,16 @@ import com.github.wildsource.springbeangenerator.utils.Capitalizer;
 public class ControllerStrategy implements Callable<Path> {
 	private String controllerName;
 	private String capitalizedName;
+	private Class<?> serviceClass;
 
-	public ControllerStrategy(String controllerName) {
+	public ControllerStrategy(String controllerName, Class<?> serviceClass) {
 		this.controllerName = controllerName;
 		this.capitalizedName = Capitalizer.capitalizeString(controllerName);
+		this.serviceClass = serviceClass;
 	}
 
 	private FieldSpec produceField() {
-		return FieldSpec.builder(Service.class, controllerName + "Service")
+		return FieldSpec.builder(serviceClass.getClass(), controllerName + "Service")
 						.addAnnotation(Autowired.class)
 						.addModifiers(Modifier.PRIVATE)
 						.build();

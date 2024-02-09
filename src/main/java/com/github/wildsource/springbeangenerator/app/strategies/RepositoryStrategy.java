@@ -16,9 +16,11 @@ import com.github.wildsource.springbeangenerator.utils.Capitalizer;
 
 public class RepositoryStrategy implements Callable<Path> {
 	private String repositoryName;
+	private Class<?> entityClass;
 
-	public RepositoryStrategy(String repositoryName) {
+	public RepositoryStrategy(String repositoryName, Class<?> entityClass) {
 		this.repositoryName = repositoryName;
+		this.entityClass = entityClass;
 	}
 
 	@Override
@@ -26,8 +28,8 @@ public class RepositoryStrategy implements Callable<Path> {
 		TypeSpec repository = TypeSpec	.interfaceBuilder(Capitalizer.capitalizeString(repositoryName) + "Repository")
 										.addModifiers(Modifier.PUBLIC)
 										.addAnnotation(Repository.class)
-										.addSuperinterface(ParameterizedTypeName.get(CrudRepository.class, Object.class,
-												Long.class))
+										.addSuperinterface(ParameterizedTypeName.get(CrudRepository.class,
+												entityClass.getClass(), Long.class))
 										.build();
 
 		JavaFile javaFile = JavaFile.builder(repositoryName, repository)

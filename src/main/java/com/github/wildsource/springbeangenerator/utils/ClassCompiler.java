@@ -9,17 +9,17 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 public class ClassCompiler {
-	private JavaCompiler compiler;
-	private DiagnosticCollector<JavaFileObject> diagnostics;
-	private StandardJavaFileManager fileManager;
+	private static JavaCompiler compiler;
+	private static DiagnosticCollector<JavaFileObject> diagnostics;
+	private static StandardJavaFileManager fileManager;
 
 	public ClassCompiler() {
-		this.compiler = ToolProvider.getSystemJavaCompiler();
-		this.diagnostics = new DiagnosticCollector<JavaFileObject>();
+		compiler = ToolProvider.getSystemJavaCompiler();
+		diagnostics = new DiagnosticCollector<JavaFileObject>();
 		fileManager = compiler.getStandardFileManager(diagnostics, null, null);
 	}
 
-	public Boolean compileSourceFile(String sourceCodeFilePath) {
+	public static Boolean compileSourceFile(String sourceCodeFilePath) {
 		Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjects(
 				new File(sourceCodeFilePath));
 		JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null,

@@ -21,7 +21,6 @@ public class Executor {
 
 	public void addThreadToPool(Callable<Path> strategy) {
 		futureThread = executorPool.submit(strategy);
-		executorPool.shutdown();
 	}
 
 	public Path execute() {

@@ -31,20 +31,20 @@ public class GeneratorCommand {
 	}
 
 	@Command(command = "controller", alias = "roller", description = "generates a named controller")
-	public String generateController(@Option(required = true) String controllerName, Class<?> serviceClass) {
-		prepareExecutorAndExecute(new ControllerStrategy(controllerName, classIsPresent(serviceClass)));
+	public String generateController(@Option(required = true) String controllerName) {
+		prepareExecutorAndExecute(new ControllerStrategy(controllerName, Object.class));
 		return "Generated controller named " + controllerName;
 	}
 
 	@Command(command = "service", alias = "serve", description = "generates a named service")
-	public String generateService(@Option(required = true) String serviceName, Class<?> repositoryClass) {
-		prepareExecutorAndExecute(new ServiceStrategy(serviceName, classIsPresent(repositoryClass)));
+	public String generateService(@Option(required = true) String serviceName) {
+		prepareExecutorAndExecute(new ServiceStrategy(serviceName, Object.class));
 		return "Generated service named " + serviceName;
 	}
 
 	@Command(command = "repository", alias = "repo", description = "generates a named repository")
-	public String generateRepository(@Option(required = true) String repositoryName, Class<?> entityClass) {
-		prepareExecutorAndExecute(new RepositoryStrategy(repositoryName, classIsPresent(entityClass)));
+	public String generateRepository(@Option(required = true) String repositoryName) {
+		prepareExecutorAndExecute(new RepositoryStrategy(repositoryName, Object.class));
 		return "generating repository named " + repositoryName;
 	}
 
@@ -57,9 +57,5 @@ public class GeneratorCommand {
 	private Path prepareExecutorAndExecute(Callable<Path> strategy) {
 		this.executor.addThreadToPool(strategy);
 		return this.executor.execute();
-	}
-
-	private Class<?> classIsPresent(Class<?> maybeClass) {
-		return maybeClass == null ? Object.class : maybeClass;
 	}
 }

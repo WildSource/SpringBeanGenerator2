@@ -1,5 +1,7 @@
 package com.github.wildsource.springbeangenerator.app.commands;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
@@ -11,6 +13,7 @@ import com.github.wildsource.springbeangenerator.app.strategies.ControllerStrate
 import com.github.wildsource.springbeangenerator.app.strategies.EntityStrategy;
 import com.github.wildsource.springbeangenerator.app.strategies.RepositoryStrategy;
 import com.github.wildsource.springbeangenerator.app.strategies.ServiceStrategy;
+import com.github.wildsource.springbeangenerator.utils.ClassCompiler;
 
 @Command(command = "generate", alias = "gen", description = "generates beans")
 public class GeneratorCommand {
@@ -23,10 +26,12 @@ public class GeneratorCommand {
 
 	@Command(command = "feature", alias = "feat", description = "generates a named feature with controller, service and repository")
 	public String generateFeature(@Option(required = true) String featureName) {
-		Class<?> entity = prepareExecutorAndExecute(new EntityStrategy(featureName)).getClass();
-		Class<?> repository = prepareExecutorAndExecute(new RepositoryStrategy(featureName, entity)).getClass();
-		Class<?> service = prepareExecutorAndExecute(new ServiceStrategy(featureName, repository)).getClass();
-		prepareExecutorAndExecute(new ControllerStrategy(featureName, service));
+		String entityPath = prepareExecutorAndExecute(new EntityStrategy(featureName)).toString();
+
+		ClassCompiler.compileSourceFile(entityPath);
+		String compiledEntityPath = entityPath.replace(".java", ".class");
+		URL classesUrl = ClassCompiler.GetCompiledFileURL(compiledEntityPath);
+		URLClassLoader classLoader = new URLClassLoader(new URL[] { classesUrl });
 		return "Generated feature named " + featureName;
 	}
 
@@ -58,4 +63,5 @@ public class GeneratorCommand {
 		this.executor.addThreadToPool(strategy);
 		return this.executor.execute();
 	}
+
 }
